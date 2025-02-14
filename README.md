@@ -31,3 +31,5 @@ If you're using Jupyter Notebooks _and_ want to use a separate virtual environme
     - Should not be necessary (in the future; also see https://github.com/astral-sh/uv/issues/8590)
   - [ ] Install dependencies
     - `uv pip install -r requirements.txt` (from the `notebooks` folder)
+- Install the current virtual environment as a kernel: `ipython kernel install --user --name=$(basename "$VIRTUAL_ENV")`
+- Run Jupyter: `jupyter notebook`
