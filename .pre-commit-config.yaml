@@ -66,3 +66,13 @@ repos:
 #          - "-rA" # Summary report (A: all); same as "-rfEsxXp" (f: failed, E: error, s: skipped, x: xfailed, X: xpassed, p: passed)
 #          - "--cov=src"  # Produce coverage report
 #          - "--cov-report=term"  # Output coverage report to terminal
+
+  # See https://docs.sourcery.ai/Coding-Assistant/Guides/Getting-Started/Pre-Commit/
+  - repo: https://github.com/sourcery-ai/sourcery
+    rev: v1.34.0
+    hooks:
+      - id: sourcery
+        # The best way to use Sourcery in a pre-commit hook:
+        # * review only changed lines:
+        # * omit the summary
+        args: [--diff=git diff HEAD, --no-summary]
