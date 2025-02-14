@@ -19,10 +19,17 @@ Quick start for a new Python project. Currently, this just adds the `pre-commit-
 - [ ] Remove the contents of this file and update for the project
 
 If you're using Jupyter Notebooks _and_ want to use a separate virtual environment
-- [ ] Create separate virtual env: `cd notebooks; make_venv <python_version> $(basename $(dirname $(pwd)))`
-  - To append the basefolder as suffix
+- [ ] Create separate virtual env (with the basefolder as suffix):
+  - `cd notebooks`
+  - `make_venv <python_version> $(basename $(dirname $(pwd)))`
+- [ ] Create `.envrc` file: `echo_envrc <python_version> $(basename $(dirname $(pwd))) > .envrc`
 - [ ] Add Jupyter dependency `uv add --group eda jupyter`
-- [ ] Export dependencies: `uv export --all-groups > notebooks/requirements.txt`
-  - Note: Should not be necessary (in the future; also see https://github.com/astral-sh/uv/issues/8590)
-  - Let's try `uv sync --all-groups`
-- [ ] Install dependencies
+- If you're fine including "eda" and other groups' dependencies in `uv.lock`:
+  - Run `uv sync --all-groups` (from the `notebooks` folder)
+- Otherwise
+  - [ ] Export dependencies: `uv export --all-groups > notebooks/requirements.txt`
+    - Should not be necessary (in the future; also see https://github.com/astral-sh/uv/issues/8590)
+  - [ ] Install dependencies
+    - `uv pip install -r requirements.txt` (from the `notebooks` folder)
+- Install the current virtual environment as a kernel: `ipython kernel install --user --name=$(basename "$VIRTUAL_ENV")`
+- Run Jupyter: `jupyter notebook`
