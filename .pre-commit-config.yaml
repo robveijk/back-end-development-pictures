@@ -17,7 +17,7 @@ repos:
   # See https://docs.astral.sh/uv/guides/integration/pre-commit/
   - repo: https://github.com/astral-sh/uv-pre-commit
     # uv version.
-    rev: 0.5.31
+    rev: 0.6.0
     hooks:
       - id: uv-lock
 
@@ -31,7 +31,7 @@ repos:
         name: "ruff isort"
       # Run the linter.
       - id: ruff
-        args: [ "format", "--fix" ]
+        args: [ "--fix" ]
         name: "ruff lint"
       # Run the formatter.
       - id: ruff-format
