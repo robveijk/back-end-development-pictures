@@ -1,0 +1,6 @@
+# Note: We use a separate ruff.toml here, so we can use pyproject.toml for project-specific configuration,
+#       when creating a new repository using the current one as template.
+#       The contents of this file may be incorporated into the project's pyproject.toml, if preferred.
+
+# Allow lines to be as long as 120.
+line-length = 120
