@@ -1,0 +1,87 @@
+# See https://pre-commit.com for more information
+
+fail_fast: true
+# Do not check Jupyter notebooks:
+exclude: '.*\.ipynb$'
+
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+
+  # See https://docs.astral.sh/uv/guides/integration/pre-commit/
+  - repo: https://github.com/astral-sh/uv-pre-commit
+    # uv version.
+    rev: 0.6.6
+    hooks:
+      - id: uv-lock
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    # Ruff version.
+    rev: v0.11.0
+    hooks:
+      # Run the import sorter; see https://docs.astral.sh/ruff/formatter/#sorting-imports
+      - id: ruff
+        args: [ "check", "--select", "I", "--fix" ]
+        name: "ruff isort"
+      # Run the linter.
+      - id: ruff
+        args: [ "--fix" ]
+        name: "ruff lint"
+      # Run the formatter.
+      - id: ruff-format
+        args: ["--config", "ruff.toml"]
+        name: "ruff format"
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    # Revisions: https://github.com/pre-commit/mirrors-mypy/tags
+    rev: 'v1.15.0'  # Use the sha / tag you want to point at
+    hooks:
+      - id: mypy
+        # additional_dependencies: [types-pyyaml]
+
+#  # We may want to limit the tests if they slow down commits too much
+#  - repo: https://github.com/christophmeissner/pytest-pre-commit
+#    rev: 1.0.0
+#    hooks:
+#      - id: pytest
+##        entry: env PYTHONPATH=./src pytest
+#        additional_dependencies: [pytest-cov]
+#        # Common additional_dependencies: polars,
+#        pass_filenames: false
+#        always_run: true
+#        verbose: true  # Make sure we print the coverage output
+#        args:
+#          - "-s"  # turn off output capture
+#          - "--tb=short"  # traceback style
+#          - "--showlocals"  # show local variables in tracebacks; -l
+#          - "--last-failed"  # only re-run the failures
+#          - "--last-failed-no-failures=all"  # when there are no known test failures, run all tests
+#          - "--new-first"  # run new tests first followed by the rest of the tests
+#          - "-x"  # Exit on first error
+#          - "-v"  # verbosity
+#          - "-rA" # Summary report (A: all); same as "-rfEsxXp" (f: failed, E: error, s: skipped, x: xfailed, X: xpassed, p: passed)
+#          - "--cov=src"  # Produce coverage report
+#          - "--cov-report=term"  # Output coverage report to terminal
+
+  # See https://docs.sourcery.ai/Coding-Assistant/Guides/Getting-Started/Pre-Commit/
+  - repo: https://github.com/sourcery-ai/sourcery
+    rev: v1.35.0
+    hooks:
+      - id: sourcery
+        # The best way to use Sourcery in a pre-commit hook:
+        # * review only changed lines:
+        # * omit the summary
+        args: [--diff=git diff HEAD, --no-summary]
+
+  - repo: https://github.com/PyCQA/bandit
+    rev: '1.8.3'
+    hooks:
+      - id: bandit
+        args: [ "-c", "bandit.toml" ]
+        additional_dependencies: [ "bandit[toml]" ]
