@@ -40,14 +40,20 @@ def get_pictures():
 ######################################################################
 # GET A PICTURE
 ######################################################################
-
+def get_picture_index(id: str) -> int | None:
+    """Get the index of the picture with the given id. Returns None if not found."""
+    for i, pic in enumerate(data):
+        if pic.get("id") == id:
+            return i
+    # Not found
+    return None
 
 @app.route("/picture/<int:id>", methods=["GET"])
 def get_picture_by_id(id):
-    pictures = [p for p in data if p.get("id") == id]
-    if not pictures:
+    picture_index = get_picture_index(id)
+    if not picture_index:
         return make_response(jsonify({"message": "Picture not found"}), 404)
-    return make_response(jsonify(pictures[0])), 200
+    return make_response(data[picture_index]), 200
 
 
 ######################################################################
@@ -60,7 +66,7 @@ def create_picture():
         return make_response({"message": "Invalid input parameter"}, 422)
 
     # Check payload contents
-    if [p for p in data if p.get("id") == id]:
+    if get_picture_index(id):
         # Yes, let's capitalize "message" here :/
         return make_response(jsonify({"Message": f"picture with id {id} already present"}), 302)
 
@@ -76,7 +82,18 @@ def create_picture():
 
 @app.route("/picture/<int:id>", methods=["PUT"])
 def update_picture(id):
-    pass
+    # Check payload: 'id' field present
+    if not request.is_json or not (id := request.json.get("id")):
+        return make_response({"message": "Invalid input parameter"}, 422)
+
+    # Get index of the picture to update:
+    if not(idx := get_picture_index(id)):
+        return make_response(jsonify({"message": "picture not found"}), 404)  # So inconsistent...
+
+    # Update the picture:
+    data[idx] |= request.json
+    return make_response({"id": id}, 200)
+
 
 ######################################################################
 # DELETE A PICTURE
