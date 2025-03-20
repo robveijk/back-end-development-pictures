@@ -55,7 +55,19 @@ def get_picture_by_id(id):
 ######################################################################
 @app.route("/picture", methods=["POST"])
 def create_picture():
-    pass
+    # Check payload: 'id' field present
+    if not request.is_json or not (id := request.json.get("id")):
+        return make_response({"message": "Invalid input parameter"}, 422)
+
+    # Check payload contents
+    if [p for p in data if p.get("id") == id]:
+        # Yes, let's capitalize "message" here :/
+        return make_response(jsonify({"Message": f"picture with id {id} already present"}), 302)
+
+    # Add picture if payload is accepted
+    data.append(request.json)
+    return make_response({"id": id}, 201)
+
 
 ######################################################################
 # UPDATE A PICTURE
