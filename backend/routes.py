@@ -51,7 +51,7 @@ def get_picture_index(id: str) -> int | None:
 @app.route("/picture/<int:id>", methods=["GET"])
 def get_picture_by_id(id):
     picture_index = get_picture_index(id)
-    if not picture_index:
+    if picture_index is None:
         return make_response(jsonify({"message": "Picture not found"}), 404)
     return make_response(data[picture_index]), 200
 
@@ -66,7 +66,7 @@ def create_picture():
         return make_response({"message": "Invalid input parameter"}, 422)
 
     # Check payload contents
-    if get_picture_index(id):
+    if get_picture_index(id) is not None:
         # Yes, let's capitalize "message" here :/
         return make_response(jsonify({"Message": f"picture with id {id} already present"}), 302)
 
@@ -82,12 +82,12 @@ def create_picture():
 
 @app.route("/picture/<int:id>", methods=["PUT"])
 def update_picture(id):
-    # Check payload: 'id' field present
-    if not request.is_json or not (id := request.json.get("id")):
+    # Check payload
+    if not request.is_json:
         return make_response({"message": "Invalid input parameter"}, 422)
 
     # Get index of the picture to update:
-    if not(idx := get_picture_index(id)):
+    if (idx := get_picture_index(id)) is None:
         return make_response(jsonify({"message": "picture not found"}), 404)  # So inconsistent...
 
     # Update the picture:
@@ -100,4 +100,9 @@ def update_picture(id):
 ######################################################################
 @app.route("/picture/<int:id>", methods=["DELETE"])
 def delete_picture(id):
-    pass
+    # Get index of the picture to update:
+    if (idx := get_picture_index(id)) is None:
+        return make_response({"message": "picture not found"}, 404)
+    # Remove the picture:
+    del data[idx]
+    return make_response({"id": id}, 204)
