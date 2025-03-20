@@ -44,7 +44,10 @@ def get_pictures():
 
 @app.route("/picture/<int:id>", methods=["GET"])
 def get_picture_by_id(id):
-    pass
+    pictures = [p for p in data if p.get("id") == id]
+    if not pictures:
+        return make_response(jsonify({"message": "Picture not found"}), 404)
+    return make_response(jsonify(pictures[0])), 200
 
 
 ######################################################################
