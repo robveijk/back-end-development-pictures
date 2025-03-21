@@ -1,13 +1,6 @@
-from pymongo import MongoClient
-user = 'root'
-password = 'MjQwOTgtcnNhbm5h' # CHANGE THIS TO THE PASSWORD YOU NOTED IN THE EARLIER EXCERCISE - 2
-host='mongo'
-#create the connection url
-connecturl = "mongodb://{}:{}@{}:27017/?authSource=admin".format(user,password,host)
+from src_mongo.mongo_util import get_connection
 
-# connect to mongodb server
-print("Connecting to mongodb server")
-connection = MongoClient(connecturl)
+connection = get_connection()
 
 # select the 'training' database
 
