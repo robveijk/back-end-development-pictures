@@ -20,6 +20,7 @@ dependencies = [
     "pinocchio==0.4.3",
     "psycopg2-binary==2.9.10",
     "pylint==2.14.0",
+    "pymongo>=4.11.3",
     "pytest>=8.3.5",
     "python-dotenv==0.20.0",
     "sqlalchemy==1.4.46",
