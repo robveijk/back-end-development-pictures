@@ -40,7 +40,7 @@ def get_pictures():
 ######################################################################
 # GET A PICTURE
 ######################################################################
-def get_picture_index(id: str) -> int | None:
+def get_picture_index(id: str):
     """Get the index of the picture with the given id. Returns None if not found."""
     for i, pic in enumerate(data):
         if pic.get("id") == id:
